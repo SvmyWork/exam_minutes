@@ -279,6 +279,7 @@ class StudentController extends Controller
                     'PaperName' => $metadata->test_name,
                     'PaperId' => $this->ConvertIdToString($testId),
                     'TeacherName' => $metadata->teacher_name,
+                    'TeacherId' => $this->ConvertIdToString($metadata->teacher_id),
                     'TotalQuestion' => $metadata->TotalQuestion,
                     'TotalSection' => $metadata->TotalSection,
                     'SectionName' => $metadata->SectionName,

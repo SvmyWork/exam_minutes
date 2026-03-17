@@ -250,7 +250,9 @@
             <div class="mt-2 font-semibold">John Smith</div>
         </aside>
     </div>
+    
     <script src="{{ asset('assets/js/exam/pageProtection.js') }}"></script>
+    <script src="{{ asset('assets/js/exam/instructions.js') }}"></script>
 </body>
 
 </html>

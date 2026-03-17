@@ -313,7 +313,7 @@
         </aside>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('assets/js/exam/instructions.js') }}"></script>
+    <script src="{{ asset('assets/js/exam/extra_instructions.js') }}"></script>
     <script src="{{ asset('assets/js/exam/localstorage.js') }}"></script>
     <script src="{{ asset('assets/js/exam/pageProtection.js') }}"></script>
 

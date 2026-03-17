@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use App\Models\EmailVerification;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Question;
+use Illuminate\Support\Str;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -20,7 +23,47 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
+    private function ConvertIdToString($id)
+    {
+        $id = (int) $id;
+        // if id starts with 10 then replace 10 with TS-
+        if (Str::startsWith($id, '10')) {
+            return Str::replaceFirst('10', 'TC-', $id);
+        }else if (Str::startsWith($id, '20')) {
+            return Str::replaceFirst('20', 'ST-', $id);
+        }else if (Str::startsWith($id, '30')) {
+            return Str::replaceFirst('30', 'TS-', $id);
+        }else if (Str::startsWith($id, '40')) {
+            return Str::replaceFirst('40', 'T-', $id);
+        }else if (Str::startsWith($id, '50')) {
+            return Str::replaceFirst('50', 'q', $id);
+        }else if (Str::startsWith($id, '60')) {
+            return Str::replaceFirst('60', 'sec', $id);
+        }
+        return (string) $id;
+    }
+    private function ConvertIdToInteger($code)
+    {   
+        // Ensure it's a string
+        $code = (string) $code;
 
+        if (Str::startsWith($code, 'TC-')) {
+            return (int) Str::replaceFirst('TC-', '10', $code);
+        } else if (Str::startsWith($code, 'ST-')) {
+            return (int) Str::replaceFirst('ST-', '20', $code);
+        } else if (Str::startsWith($code, 'TS-')) {
+            return (int) Str::replaceFirst('TS-', '30', $code);
+        } else if (Str::startsWith($code, 'T-')) {
+            return (int) Str::replaceFirst('T-', '40', $code);
+        } else if (Str::startsWith($code, 'q')) {
+            return (int) Str::replaceFirst('q', '50', $code);
+        } else if (Str::startsWith($code, 'section')) {
+            return (int) Str::replaceFirst('section', '60', $code);
+        }
+
+        // If no known prefix, return as integer directly
+        return (int) $code;
+    }
     
 
     public function server(Request $request)
@@ -53,75 +96,93 @@ class ApiController extends Controller
     public function getExamPaper(Request $request)
     {
         // Sample paper with mixed image/text types
-        $paper = [
-            1 => [
-                "section" => "Paper-1",
-                "Q" => "What is the name of the weak zone of the earth’s crust?",
-                "options" => ["Seismic", "Cosmic", "Formic", "Anaemic"],
-                "qtype" => "text",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            2 => [
-                "section" => "Paper-1",
-                "Q" => "What is 2+2?",
-                "options" => ["3", "4", "5", "6"],
-                "qtype" => "text",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            3 => [
-                "section" => "Paper-2",
-                "Q" => "Identify the animal in the image",
-                "options" => ["lion.jpg", "tiger", "bear", "elephant"],
-                "qtype" => "text",
-                "anstype" => ["image", "text", "text", "text"]
-            ],
-            4 => [
-                "section" => "Paper-2",
-                "Q" => "piechart.svg",
-                "options" => ["It is a bar graph", "It is a pie chart", "It is a line graph", "It is a histogram"],
-                "qtype" => "image",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            5 => [
-                "section" => "Paper-2",
-                "Q" => "Which image shows the Taj Mahal?",
-                "options" => ["tajmahal", "qutubminar", "gatewayofindia", "redfort"],
-                "qtype" => "text",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            6 => [
-                "section" => "Paper-3",
-                "Q" => "Solve: 5 × 3 = ?",
-                "options" => ["15", "8", "10", "20"],
-                "qtype" => "text",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            7 => [
-                "section" => "Paper-3",
-                "Q" => "state_map.png",
-                "options" => ["Maharashtra", "Tamil Nadu", "Kerala", "Karnataka"],
-                "qtype" => "image",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            8 => [
-                "section" => "Paper-3",
-                "Q" => "Which image is the national bird of India?",
-                "options" => ["peacock", "sparrow", "parrot", "eagle"],
-                "qtype" => "text",
-                "anstype" => ["text", "text", "text", "text"]
-            ],
-            9 => [
-                "section" => "Paper-3",
-                "Q" => "**1 mole** of \$K_4[Fe(CN)_6]\$ contains carbon = **6 g-atoms**.  
-            **0.5 mole** of \$K_4[Fe(CN)_6]\$ contains carbon = **3 g-atoms**.  
-            The mass of carbon present in **0.5 mole** of \$K_4[Fe(CN)_6]\$ is:",
-                "options" => ["**6 g-atoms**. **0.5 mole** of \$K_4[Fe(CN)_6]\$ contains", "18 g", "3.6 g", "1.8 g"],
-                "qtype" => "markdown",
-                "anstype" => ["markdown", "text", "text", "text"]
-            ]
+        $testId = $this->ConvertIdToInteger($request->input('testId'));
+        $teacherId = $this->ConvertIdToInteger($request->input('teacherId'));
+        Log::info('Exam paper request', ['testId' => $testId, 'teacherId' => $teacherId]);
+        $paper = Question::where('test_id', $testId)->get();
+        Log::info('Exam paper found', ['paper' => $paper->toArray()]);
+        $paper = $paper->map(function ($item) {
+            return [
+                'section' => 'Paper-1',
+                'Q' => $item->questionTitle,
+                'options' => array_map(function ($item) {
+                                return strip_tags($item['text']); // removes HTML like <p>
+                            }, json_decode($item->options, true)),
+                'qtype' => 'text',
+                'anstype' => array_map(function ($item) {
+                                return 'text';
+                            }, json_decode($item->options, true)),
+            ];
+        });
+        // $paper = [
+        //     1 => [
+        //         "section" => "Paper-1",
+        //         "Q" => "What is the name of the weak zone of the earth’s crust?",
+        //         "options" => ["Seismic", "Cosmic", "Formic", "Anaemic"],
+        //         "qtype" => "text",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     2 => [
+        //         "section" => "Paper-1",
+        //         "Q" => "What is 2+2?",
+        //         "options" => ["3", "4", "5", "6"],
+        //         "qtype" => "text",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     3 => [
+        //         "section" => "Paper-2",
+        //         "Q" => "Identify the animal in the image",
+        //         "options" => ["lion.jpg", "tiger", "bear", "elephant"],
+        //         "qtype" => "text",
+        //         "anstype" => ["image", "text", "text", "text"]
+        //     ],
+        //     4 => [
+        //         "section" => "Paper-2",
+        //         "Q" => "piechart.svg",
+        //         "options" => ["It is a bar graph", "It is a pie chart", "It is a line graph", "It is a histogram"],
+        //         "qtype" => "image",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     5 => [
+        //         "section" => "Paper-2",
+        //         "Q" => "Which image shows the Taj Mahal?",
+        //         "options" => ["tajmahal", "qutubminar", "gatewayofindia", "redfort"],
+        //         "qtype" => "text",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     6 => [
+        //         "section" => "Paper-3",
+        //         "Q" => "Solve: 5 × 3 = ?",
+        //         "options" => ["15", "8", "10", "20"],
+        //         "qtype" => "text",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     7 => [
+        //         "section" => "Paper-3",
+        //         "Q" => "state_map.png",
+        //         "options" => ["Maharashtra", "Tamil Nadu", "Kerala", "Karnataka"],
+        //         "qtype" => "image",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     8 => [
+        //         "section" => "Paper-3",
+        //         "Q" => "Which image is the national bird of India?",
+        //         "options" => ["peacock", "sparrow", "parrot", "eagle"],
+        //         "qtype" => "text",
+        //         "anstype" => ["text", "text", "text", "text"]
+        //     ],
+        //     9 => [
+        //         "section" => "Paper-3",
+        //         "Q" => "**1 mole** of \$K_4[Fe(CN)_6]\$ contains carbon = **6 g-atoms**.  
+        //     **0.5 mole** of \$K_4[Fe(CN)_6]\$ contains carbon = **3 g-atoms**.  
+        //     The mass of carbon present in **0.5 mole** of \$K_4[Fe(CN)_6]\$ is:",
+        //         "options" => ["**6 g-atoms**. **0.5 mole** of \$K_4[Fe(CN)_6]\$ contains", "18 g", "3.6 g", "1.8 g"],
+        //         "qtype" => "markdown",
+        //         "anstype" => ["markdown", "text", "text", "text"]
+        //     ]
 
 
-        ];
+        // ];
 
         return response()->json([
             'status' => 'success',

@@ -110,6 +110,9 @@
   localStorage.setItem("examTimer", "{{ $Timeinit }}");
   const data = @json($data);
   localStorage.setItem('examMetaData', JSON.stringify(data));
+  console.log(data);
+  localStorage.setItem('testId', data['PaperId']);
+  localStorage.setItem('teacherId', data['TeacherId']);
 </script>
 
 

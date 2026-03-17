@@ -8,3 +8,5 @@
 - [x] Test metadata migration: **H:\freelancer\exam\database\migrations\2023_08_10_100000_create_test_metadata_table.php**
 
 - [x] exam login: **H:\freelancer\exam\resources\views\student\exam\login.blade.php**
+
+- [ ] section, question type, answer type need to be saved in question table
