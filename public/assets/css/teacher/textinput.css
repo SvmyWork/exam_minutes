@@ -1,0 +1,46 @@
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin: 0 10px;
+}
+.trumbowyg-editor {
+    padding: 10px 20px;
+}
+.trumbowyg-box {
+    /* min-height: 105px; */
+    min-height: 15px;
+    border:none;
+    border-radius: 2px;
+}
+
+/* .answer-option {
+    border-bottom: 1px solid var(--primary-light);
+} */
+
+.trumbowyg-box:focus-within {
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 3px 3px var(--primary-light);
+    outline: none;
+}
+.trumbowyg-box-focus {
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 3px 3px var(--primary-light);
+    outline: none;
+}
+/* .trumbowyg-editor-box {
+    border-top: 1px solid blue;
+} */
+
+/* .trumbowyg-button-pane {
+    border-bottom: 1px solid blue;
+} */
+
+
+/* @media (max-width: 768px) {
+    .trumbowyg-box {
+        min-height: 165px;
+        min-height: 100px;
+    } 
+} */

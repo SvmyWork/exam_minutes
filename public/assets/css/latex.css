@@ -1,0 +1,514 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    font-size: 16px;
+    padding: 10px;
+}
+
+#preview {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    min-height: 60px;
+}
+
+.CCTextArea:empty:not(:focus):before {
+    content: attr(placeholder);
+    font-size: 120%;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+}
+
+.CCTextArea .underline {
+    border-bottom: solid 2px rgba(36, 157, 127, .8);
+}
+
+.CCTextArea>.CCtext {
+    color: #00f;
+    font-style: italic;
+}
+
+.CCTextArea>.CCmatrix {
+    color: #f00;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCoperator {
+    color: #0a0;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCcommand {
+    font-weight: bold;
+}
+
+.CCTextArea>.CCword {
+    color: #057;
+}
+
+.CCTextArea>.CCnumbers {
+    color: #060;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCbrackets {
+    color: #6a6;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCrestricted {
+    color: #a00;
+    font-weight: bold;
+    text-decoration-line: underline;
+    text-decoration-style: double;
+    text-decoration-color: #a00;
+}
+
+.CCTextArea>.CCtemp {
+    color: #555;
+    background-color: #ddd;
+}
+
+.CCToolbar .scrollable {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.CCToolbar .cc_dropdown {
+    display: inline-block;
+    vertical-align: top;
+    webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: initial;
+    margin: 5px 6px;
+}
+
+.CCToolbar .cc_dropdown img:hover {
+    background-color: #d9d9d9;
+}
+
+.CCToolbar .cc_dropdown>span {
+    padding: 0 2px;
+    display: grid;
+    grid-template-rows: auto;
+    column-gap: 5px;
+    row-gap: 5px;
+    position: relative;
+}
+
+.CCToolbar .cc_dropdown>div {
+    grid-template-rows: auto;
+    column-gap: 5px;
+    row-gap: 5px;
+    display: none;
+    position: absolute;
+    background-color: white;
+    padding: 6px 2px;
+    box-shadow: 0px 16px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.CCToolbar .cc_dropdown>div.cc_show {
+    display: grid;
+}
+
+.CCToolbar .cc_dropdown>span:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 7px 0 0;
+    border-color: transparent #063A92 transparent transparent;
+    right: 0;
+    top: 40px;
+    position: absolute;
+}
+
+.CCToolbar .cc_dropdown:hover>span:after {
+    border-color: transparent;
+}
+
+.CCToolbar .vertical-line {
+    width: 1px;
+    background-color: #063A92;
+    height: 35px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 12px;
+}
+
+.CCToolbar .toolbar {
+    white-space: nowrap;
+    padding-bottom: 5px
+}
+
+.CCToolbar .toolbar::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.CCToolbar .toolbar::-webkit-scrollbar-thumb {
+    background-color: #003794;
+    border: 3px solid transparent;
+    border-radius: 9px;
+    background-clip: content-box;
+}
+
+.CCToolbar .toolbar::-webkit-scrollbar-track {
+    background-color: rgba(100, 100, 100, .1);
+    width: 10px;
+}
+
+.CCButton {
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 0px 5px;
+    width: fit-content;
+    margin: auto;
+}
+
+.CCImage {
+    margin: auto
+}
+
+.CCToolbar .matrixCellSelection {
+    column-gap: 5px;
+    row-gap: 5px;
+    padding: 10px;
+}
+
+.CCToolbar .matrixCellSelection div {
+    height: 10px;
+    width: 100%;
+    background-color: #eee;
+}
+
+.CCToolbar .matrixCellSelection div.cellon {
+    background-color: #063A92;
+}
+
+.CCToolbar .cc_manualSelection {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: auto;
+    column-gap: 5px;
+    row-gap: 5px;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.CCToolbar .cc_manualSelection input {
+    width: 40px;
+    height: 20px;
+    font-size: 12px;
+}
+
+.CCToolbar .cc_manualSelection label {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+    margin: auto 0;
+}
+
+.CCToolbar .cc_manualSelection button {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 10px;
+    border: none;
+    background-color: #063A92;
+    color: white;
+}
+
+#CC_floatingDiv {
+    border: 1px solid #003794;
+    overflow-y: scroll;
+    max-height: 100px;
+    z-index: 5;
+    background-color: #fff;
+}
+
+#CC_floatingDiv ul {
+    list-style-type: none;
+    padding: 3px;
+    margin: 0px;
+    font-size: 80%;
+    float: left;
+    font-weight: 400;
+    color: black;
+    line-height: normal;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#CC_floatingDiv li:before {
+    content: none;
+}
+
+#CC_floatingDiv ul .active,
+#CC_floatingDiv ul li:focus {
+    background-color: #003794;
+    color: white;
+}
+
+#CC_floatingDiv ul li:hover {
+    background-color: #009437;
+    color: white;
+}
+
+.CCTextArea:empty:not(:focus):before {
+    content: attr(placeholder);
+    font-size: 120%;
+    color: #888;
+    padding: 5px;
+    position: absolute;
+}
+
+.CCTextArea .underline {
+    border-bottom: solid 2px rgba(36, 157, 127, .8);
+}
+
+.CCTextArea>.CCtext {
+    color: #00f;
+    font-style: italic;
+}
+
+.CCTextArea>.CCmatrix {
+    color: #f00;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCoperator {
+    color: #0a0;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCcommand {
+    font-weight: bold;
+}
+
+.CCTextArea>.CCword {
+    color: #057;
+}
+
+.CCTextArea>.CCnumbers {
+    color: #060;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCbrackets {
+    color: #6a6;
+    font-weight: bold;
+}
+
+.CCTextArea>.CCrestricted {
+    color: #a00;
+    font-weight: bold;
+    text-decoration-line: underline;
+    text-decoration-style: double;
+    text-decoration-color: #a00;
+}
+
+.CCTextArea>.CCtemp {
+    color: #555;
+    background-color: #ddd;
+}
+
+.CCToolbar .scrollable {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.CCToolbar .cc_dropdown {
+    display: inline-block;
+    vertical-align: top;
+    webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: initial;
+    margin: 5px 6px;
+}
+
+.CCToolbar .cc_dropdown img:hover {
+    background-color: #d9d9d9;
+}
+
+.CCToolbar .cc_dropdown>span {
+    padding: 0 2px;
+    display: grid;
+    grid-template-rows: auto;
+    column-gap: 5px;
+    row-gap: 5px;
+    position: relative;
+}
+
+.CCToolbar .cc_dropdown>div {
+    grid-template-rows: auto;
+    column-gap: 5px;
+    row-gap: 5px;
+    display: none;
+    position: absolute;
+    background-color: white;
+    padding: 6px 2px;
+    box-shadow: 0px 16px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.CCToolbar .cc_dropdown>div.cc_show {
+    display: grid;
+}
+
+.CCToolbar .cc_dropdown>span:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 7px 0 0;
+    border-color: transparent #063A92 transparent transparent;
+    right: 0;
+    top: 40px;
+    position: absolute;
+}
+
+.CCToolbar .cc_dropdown:hover>span:after {
+    border-color: transparent;
+}
+
+.CCToolbar .vertical-line {
+    width: 1px;
+    background-color: #063A92;
+    height: 35px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 12px;
+}
+
+.CCToolbar .toolbar {
+    white-space: nowrap;
+    padding-bottom: 5px
+}
+
+.CCToolbar .toolbar::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.CCToolbar .toolbar::-webkit-scrollbar-thumb {
+    background-color: #2b71eb;
+    border: 3px solid transparent;
+    border-radius: 9px;
+    background-clip: content-box;
+}
+
+.CCToolbar .toolbar::-webkit-scrollbar-track {
+    background-color: rgba(100, 100, 100, .1);
+    width: 10px;
+}
+
+.CCButton {
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 0px 5px;
+    width: fit-content;
+    margin: auto;
+}
+
+.CCImage {
+    margin: auto
+}
+
+.CCToolbar .matrixCellSelection {
+    column-gap: 5px;
+    row-gap: 5px;
+    padding: 10px;
+}
+
+.CCToolbar .matrixCellSelection div {
+    height: 10px;
+    width: 100%;
+    background-color: #eee;
+}
+
+.CCToolbar .matrixCellSelection div.cellon {
+    background-color: #063A92;
+}
+
+.CCToolbar .cc_manualSelection {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: auto;
+    column-gap: 5px;
+    row-gap: 5px;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.CCToolbar .cc_manualSelection input {
+    width: 40px;
+    height: 20px;
+    font-size: 12px;
+}
+
+.CCToolbar .cc_manualSelection label {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+    margin: auto 0;
+}
+
+.CCToolbar .cc_manualSelection button {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 10px;
+    border: none;
+    background-color: #063A92;
+    color: white;
+}
+
+#CC_floatingDiv {
+    border: 1px solid #003794;
+    overflow-y: scroll;
+    max-height: 100px;
+    z-index: 5;
+    background-color: #fff;
+}
+
+#CC_floatingDiv ul {
+    list-style-type: none;
+    padding: 3px;
+    margin: 0px;
+    font-size: 80%;
+    float: left;
+    font-weight: 400;
+    color: black;
+    line-height: normal;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#CC_floatingDiv li:before {
+    content: none;
+}
+
+#CC_floatingDiv ul .active,
+#CC_floatingDiv ul li:focus {
+    background-color: #003794;
+    color: white;
+}
+
+#CC_floatingDiv ul li:hover {
+    background-color: #009437;
+    color: white;
+}
