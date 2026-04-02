@@ -50,8 +50,9 @@
 </button>
 
 <script>
+  $testId = "{{ $test_id }}";
   function openFullscreenPage() {
-    const routeUrl = "{{ route('exam.instructions') }}";
+    const routeUrl = "{{ route('exam.instructions', ['test_id' => $test_id]) }}";
 
     const win = window.open('', '_blank', 'width=' + screen.width + ',height=' + screen.height + ',toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');
 

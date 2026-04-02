@@ -255,6 +255,9 @@ class StudentController extends Controller
         $studentName = session('student_name');
         $allTests = Test::get(['id', 'test_id', 'test_name']);
 
+        $request->session()->put('student_id', $studentId);
+        $request->session()->put('student_name', $studentName);
+
         return view('student.dashboard', ['name' => $studentName, 'student_id' => $studentId, 'tests' => $allTests]);
     }
 
@@ -265,6 +268,7 @@ class StudentController extends Controller
             $test = Test::where('test_id', $testId)->first();
 
             if ($test) {
+                $request->session()->put('test_id', $testId);
                 $teacherId = $test->teacher_id;
                 $testSeriesId = $test->test_series_id;
 
@@ -283,8 +287,8 @@ class StudentController extends Controller
                     'TotalQuestion' => $metadata->TotalQuestion,
                     'TotalSection' => $metadata->TotalSection,
                     'SectionName' => $metadata->SectionName,
-                    'SectionTotalQuestion' => 4,
-                    'SectionInitialQuestion' => $metadata->SectionInitialQuestionid,
+                    'SectionTotalQuestion' => [4],
+                    'SectionInitialQuestion' => [1],
                     'CurrentSectionName' => $metadata->SectionName[0],
                     'CurrentSectionTotalQuestion' => 4,
                     'SectionWiseTime' => $metadata->SectionWiseTime == 1 ? true : false,
@@ -293,8 +297,8 @@ class StudentController extends Controller
                     'Calculator' => $metadata->Calculator == 1 ? true : false,
                 ];
                 $Timeinit = "05:00";
-
-                return view('teacher.exam.login', ['test' => $test, 'questions' => $allQuestions, 'data' => $data, 'Timeinit' => $Timeinit]);
+                
+                return view('teacher.exam.login', ['test' => $test, 'questions' => $allQuestions, 'data' => $data, 'Timeinit' => $Timeinit, 'test_id' => $testId]);
 
 
             } else {

@@ -13,6 +13,28 @@ $(document).ready(function () {
     const currentSection = document.getElementById("currentSection");
     const finalSubmitButton = document.getElementById("submitAnswerFinal");
     const preview = document.getElementById('preview');
+    const sectionButtonsContainer = document.getElementById("section-buttons");
+    const activeSectionClasses = ["bg-[#007bff]", "text-white"];
+    const inactiveSectionClasses = ["bg-[#e7e7e7]", "text-black"];
+    const sectionBaseClasses = ["px-4", "py-2", "m-1", "rounded", "transition-colors", "duration-150"];
+
+    // Create section buttons based on metadata
+    metaData.SectionName.forEach((sectionName, index) => {
+        console.log(`Creating button for section: ${sectionName} with index: ${index + 1}`);
+        const button = document.createElement("button");
+        button.textContent = sectionName;
+        button.classList.add(...sectionBaseClasses);
+        if (index === 0) {
+            button.classList.add(...activeSectionClasses);
+        } else {
+            button.classList.add(...inactiveSectionClasses);
+        }
+        button.setAttribute("data-section", index + 1);
+        sectionButtonsContainer.appendChild(button);
+    });
+    
+
+
 
     console.log(`Total No of question: ${maxQuestions}`);
 
@@ -491,13 +513,13 @@ $(document).ready(function () {
 
         // Reset all buttons
         $("#section-buttons button")
-            .removeClass("bg-[#007bff] text-white")
-            .addClass("bg-[#e7e7e7]");
+            .removeClass(`${activeSectionClasses.join(" ")} ${inactiveSectionClasses.join(" ")}`)
+            .addClass(inactiveSectionClasses.join(" "));
 
         // Highlight the selected button
         $(`#section-buttons button[data-section="${sectionNumber}"]`)
-            .removeClass("bg-[#e7e7e7]")
-            .addClass("bg-[#007bff] text-white");
+            .removeClass(inactiveSectionClasses.join(" "))
+            .addClass(activeSectionClasses.join(" "));
 
     }
 

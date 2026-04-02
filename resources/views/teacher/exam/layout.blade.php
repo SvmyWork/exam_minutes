@@ -136,7 +136,7 @@
     <div class="flex h-[calc(100%-90px-10px)] w-full mb-4">
         <div class="flex-1 overflow-auto w-full max-w-full ">
             <div class="flex items-center bg-[#f3f3f3] px-6 py-1.5 text-xl border-b">
-                <div class="bg-blue-600 text-white px-2 py-1 rounded">Biotechnology Mock Exam</div>
+                <div class="bg-blue-600 text-white px-2 py-1 rounded">{{ $test_name }}</div>
                 
                 <div class="ml-auto cursor-pointer" id="calbtn" title="Calculator"><i class="fa-solid fa-calculator fa-xl"
                         style="color: #f07f5f;"></i>
@@ -152,9 +152,7 @@
             </div>
             <div class="flex items-center bg-[#f3f3f3] px-1 py-1.5 text-xl miniwidth overflow-y-auto">
             <div class="flex space-x-1 ml-4" id="section-buttons">
-                <button class="bg-[#007bff] text-white px-2 py-0.5 rounded min-w-[100px]" data-section="1">Section 1</button>
-                <button class="bg-[#e7e7e7] px-2 py-0.5 rounded min-w-[100px]" data-section="2">Section 2</button>
-                <button class="bg-[#e7e7e7] px-2 py-0.5 rounded min-w-[100px]" data-section="3">Section 3</button>
+
             </div>
             </div>
             @yield('content')
