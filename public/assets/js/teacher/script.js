@@ -2022,6 +2022,20 @@ function applyThemeColor(color) {
     localStorage.setItem('themeColor', color);
 }
 
+function updateTestName(name) {
+    // Update the test name in the header
+    const headerTitle = document.getElementById('form-title');
+    headerTitle.onchange = function() {
+        const newName = headerTitle.value.trim();
+        if (newName) {
+            name = newName;
+            saveFormData();
+        }
+    };
+    headerTitle.value = name;
+}
+
+
 // Image upload functionality
 
 // function initializeImageUpload() {

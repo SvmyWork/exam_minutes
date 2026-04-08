@@ -14,15 +14,7 @@ return new class extends Migration
         Schema::create('tests_metadata', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('Testid');
-
-            $table->string('test_name');
-
-            $table->unsignedBigInteger('test_series_id');
-
-            $table->string('teacher_name');
-
-            $table->unsignedBigInteger('teacher_id');
-
+            
             $table->integer('TotalQuestion');
 
             $table->integer('TotalSection');

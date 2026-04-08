@@ -10,11 +10,6 @@ class TestMetadata extends Model
 
     protected $fillable = [
         'Testid',
-        'test_name',
-        'test_series_id',
-        'teacher_name',
-        'teacher_id',
-        'TotalQuestion',
         'TotalSection',
         'SectionName',
         'SectionwiseTotalQuestion',

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Option;
 use App\Models\Question;
+use App\Models\TeacherLogin;
 use App\Models\Test;
+use App\Models\TestMetadata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\TestSeries;
@@ -184,6 +186,37 @@ class teacherApiController extends Controller
             'test_series_name' => $request->input('test_series_name'),
             'test_name' => $request->input('name'),
         ]);
+
+        if ($test) {
+
+            // teacher details
+            $teacherName = 'Unknown Teacher';
+            // Assuming you have a Teacher model and it has a 'name' attribute
+            $teacher = TeacherLogin::where('teacher_id', $this->ConvertIdToInteger($request->input('teacher_id')))->first();
+            if ($teacher) {
+                $teacherName = $teacher->name;
+            }
+            // create test metadata
+            TestMetadata::create([
+                'Testid' => $this->ConvertIdToInteger($uniqueTestId),
+                'test_name' => $request->input('name'),
+                'test_series_id' => $this->ConvertIdToInteger($request->input('test_series_id')),
+                'teacher_name' => $teacherName,
+                'teacher_id' => $this->ConvertIdToInteger($request->input('teacher_id')),
+                'TotalQuestion' => 0,
+                'TotalSection' => 0,
+                'SectionName' => [],
+                'SectionwiseTotalQuestion' => [],
+                'SectionInitialQuestionid' => null,
+                'SectionWiseTime' => 0,
+                'SectionWiseTotalTime' => [],
+                'TotalTime' => 0,
+                'Calculator' => 0,
+                'exam_start_date' => today()->format('Y-m-d H:i:s'), // default start date is now
+                'exam_end_date' => today()->addDays(14)->format('Y-m-d H:i:s'), // default end date 14 days from now
+                'status' => 1,
+            ]);
+        }
         // Here you would typically create the Test model and save it to the database.
         // For demonstration, we'll just return the validated data.
 
