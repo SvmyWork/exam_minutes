@@ -199,11 +199,6 @@ class teacherApiController extends Controller
             // create test metadata
             TestMetadata::create([
                 'Testid' => $this->ConvertIdToInteger($uniqueTestId),
-                'test_name' => $request->input('name'),
-                'test_series_id' => $this->ConvertIdToInteger($request->input('test_series_id')),
-                'teacher_name' => $teacherName,
-                'teacher_id' => $this->ConvertIdToInteger($request->input('teacher_id')),
-                'TotalQuestion' => 0,
                 'TotalSection' => 0,
                 'SectionName' => [],
                 'SectionwiseTotalQuestion' => [],

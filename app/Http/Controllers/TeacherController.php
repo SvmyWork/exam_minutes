@@ -267,7 +267,7 @@ class TeacherController extends Controller
                                 'test_series_id' => $testSeriesId,
                                 'question_sequence' => $questionSequence]);
     }
-
+    
 }
 
 

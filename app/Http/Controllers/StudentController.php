@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Models\Test;
 use App\Models\Question;
 use App\Models\TestMetadata;
+use App\Models\TeacherLogin;
 use Illuminate\Support\Facades\Cache;
 
 class StudentController extends Controller
@@ -278,25 +279,27 @@ class StudentController extends Controller
                     ->where('is_removed', false)
                     ->get();
                 $metadata = TestMetadata::where('Testid', $testId)->first();
+                $teacher_details = TeacherLogin::where('teacher_id', $test->teacher_user_id)->first();
+
                 Log::info('Test metadata', ['metadata' => $metadata]);
                 $data = [
-                    'PaperName' => $metadata->test_name,
+                    'PaperName' => $test->test_name,
                     'PaperId' => $this->ConvertIdToString($testId),
-                    'TeacherName' => $metadata->teacher_name,
-                    'TeacherId' => $this->ConvertIdToString($metadata->teacher_id),
-                    'TotalQuestion' => $metadata->TotalQuestion,
+                    'TeacherName' => $teacher_details ? $teacher_details->name : 'Unknown Teacher',
+                    'TeacherId' => $this->ConvertIdToString($test->teacher_user_id),
+                    'TotalQuestion' => $test->num_questions,
                     'TotalSection' => $metadata->TotalSection,
                     'SectionName' => $metadata->SectionName,
-                    'SectionTotalQuestion' => [4],
-                    'SectionInitialQuestion' => [1],
+                    'SectionTotalQuestion' => $metadata->SectionwiseTotalQuestion,
+                    'SectionInitialQuestion' => $metadata->SectionInitialQuestionid,
                     'CurrentSectionName' => $metadata->SectionName[0],
-                    'CurrentSectionTotalQuestion' => 4,
+                    'CurrentSectionTotalQuestion' => $metadata->SectionwiseTotalQuestion[0],
                     'SectionWiseTime' => $metadata->SectionWiseTime == 1 ? true : false,
                     'SectionWiseTotalTime' => $metadata->SectionWiseTotalTime,
                     'TotalTime' => $metadata->TotalTime,
                     'Calculator' => $metadata->Calculator == 1 ? true : false,
                 ];
-                $Timeinit = "05:00";
+                $Timeinit = sprintf('%02d:%02d', floor($metadata->TotalTime), ($metadata->TotalTime * 60) % 60); // Convert minutes to seconds
                 
                 return view('teacher.exam.login', ['test' => $test, 'questions' => $allQuestions, 'data' => $data, 'Timeinit' => $Timeinit, 'test_id' => $testId]);
 

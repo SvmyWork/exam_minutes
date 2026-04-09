@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('tests_metadata', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('Testid');
-            
-            $table->integer('TotalQuestion');
 
             $table->integer('TotalSection');
 
